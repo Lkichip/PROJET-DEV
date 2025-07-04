@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Emargement - MIAGE Antilles</title>
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    
+    :root {
+      --primary-blue: #007bff;
+      --primary-dark-blue: #0056b3;
+      --accent-purple: #8e44ad; 
+      --accent-light-purple: #9b59b6;
+      --success-green: #2ecc71;
+      --warning-orange: #f39c12;
+      --danger-red: #e74c3c;
+      --light-gray: #f8f9fa;
+      --medium-gray: #ced4da;
+      --dark-gray: #34495e;
+      --text-color: #333;
+      --background-gradient-start: #e0eafc;
+      --background-gradient-end: #cfdef3;   
+      --card-background: #ffffff;
+      --border-color: #e9ecef;
+      --shadow-light: rgba(0, 0, 0, 0.1);
+      --shadow-medium: rgba(0, 0, 0, 0.15);
+      --shadow-heavy: rgba(0, 0, 0, 0.25);
+    }
+
+    
+    body {
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      padding: 0;
+      margin: 0;
+      background: linear-gradient(135deg, var(--background-gradient-start), var(--background-gradient-end));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--text-color);
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: background-color 0.5s ease; 
+    }
+
+    
+    body.app-active {
+      background: var(--light-gray); 
+      align-items: flex-start; 
+      padding: 20px; 
+    }
+
+    
+    .welcome-banner {
+      margin-bottom: 25px;
+      text-align: center;
+      color: var(--accent-purple);
+      opacity: 0;
+      transform: translateY(-50px);
+      animation: fadeInDownMessage 0.8s ease-out forwards;
+    }
+
+    .welcome-banner h1 {
+      font-size: 3.8em; 
+      font-weight: 700; 
+      text-shadow: 3px 3px 6px var(--shadow-light);
+      margin: 0;
+      letter-spacing: 2px; 
+    }
+
+   
+    @keyframes fadeInDownMessage {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+ 
+    .login-container {
+      background-color: var(--card-background);
+      padding: 45px;
+      border-radius: 20px; 
+      box-shadow: 0 20px 40px var(--shadow-medium); 
+      text-align: center;
+      max-width: 480px; 
+      width: 90%;
+      transform: translateY(0);
+      animation: fadeInScale 0.7s ease-out 0.3s forwards;
+      position: relative;
+      z-index: 10;
+      overflow: hidden; 
+    }
+
+   
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: translateY(30px) scale(0.9); } 
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    
+    .login-container h1 {
+      font-size: 2.5em; 
+      color: var(--primary-blue);
+      margin-bottom: 40px; 
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.08); 
+    }
+
+   
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: calc(100% - 30px);
+      padding: 18px; /* Plus de padding */
+      margin-bottom: 30px; /* Plus d'espacement */
+      border: 1px solid var(--medium-gray); /* Bordure plus douce */
+      border-radius: 12px; /* Plus arrondi */
+      font-size: 1.2em; /* Texte plus grand */
+      color: var(--text-color);
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    }
+
+   
+    .login-container input[type="text"]:focus,
+    .login-container input[type="password"]:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 15px rgba(0, 123, 255, 0.35); /* Ombre plus intense */
+      background-color: var(--light-gray); /* Léger fond pour le focus */
+    }
+
+    
+    .login-container button[onclick="handleLogin()"] {
+      background-color: var(--primary-blue);
+      color: white;
+      padding: 18px 40px; /* Plus de padding */
+      border: none;
+      border-radius: 12px; /* Plus arrondi */
+      font-size: 1.4em; /* Plus grand */
+      font-weight: 600; /* Moins gras que le h1 */
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      letter-spacing: 0.8px;
+      width: 100%; /* Prend toute la largeur du conteneur */
+      margin-top: 15px; /* Plus d'espace */
+    }
+
+   
+    .login-container button[onclick="handleLogin()"]:hover {
+      background-color: var(--primary-dark-blue);
+      transform: translateY(-5px); /* Saute plus */
+      box-shadow: 0 15px 30px rgba(0, 123, 255, 0.4); /* Ombre plus prononcée */
+    }
+
+    .login-container button[onclick="handleLogin()"]:active {
+      transform: translateY(0);
+      box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+    }
+
+   
+    #login-logo-container {
+      position: absolute;
+      top: 25px; /* Légèrement plus bas */
+      right: 25px; /* Légèrement plus à droite */
+      z-index: 20;
+      opacity: 0;
+      transform: translateX(50px);
+      animation: fadeInRightLogo 0.8s ease-out 0.5s forwards;
+      display: flex;
+      align-items: center;
+      gap: 20px; 
+    }
+
+    #login-logo-container img {
+      width: 90px; /* Plus grands logos */
+      height: auto;
+      border-radius: 12px; /* Plus arrondis */
+      box-shadow: 0 6px 20px var(--shadow-light); /* Ombre plus douce */
+    }
+
+    
+    @keyframes fadeInRightLogo {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    
+    #login-footer-text {
+      position: absolute;
+      bottom: 20px; /* Plus loin du bas */
+      width: 100%;
+      text-align: center;
+      color: #7f8c8d; /* Gris plus doux */
+      font-size: 0.95em; /* Légèrement plus grand */
+      padding: 0 10px;
+      box-sizing: border-box;
+      z-index: 5;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUpFooter 0.8s ease-out 1s forwards; /* Délai un peu plus long */
+    }
+
+    @keyframes fadeInUpFooter {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    /* ========================================================== */
+    /* --- NOUVEAUX STYLES POUR L'APPLICATION APRÈS CONNEXION --- */
+    /* ========================================================== */
+
+    #app {
+      display: none; /* Cache l'application tant que l'utilisateur n'est pas connecté */
+      background-color: var(--card-background);
+      padding: 30px; /* Plus de padding */
+      border-radius: 20px; /* Bords très arrondis */
+      box-shadow: 0 25px 50px var(--shadow-medium); /* Ombre plus prononcée */
+      width: 95%;
+      max-width: 1300px; /* Largeur max plus grande pour le contenu de l'app */
+      margin: 30px auto; /* Centre l'app avec plus d'espace */
+      box-sizing: border-box;
+      min-height: 80vh; /* Hauteur minimale pour un bel affichage */
+      display: flex; /* Utilise flexbox pour l'organisation interne */
+      flex-direction: column;
+    }
+
+    /* En-tête de l'application (Titre de bienvenue & Bouton Home) */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border-color); /* Ligne de séparation */
+    }
+
+    #welcome-title {
+      color: var(--accent-purple); /* Couleur vive */
+      font-size: 2.5em; /* Grande taille */
+      font-weight: 600;
+      margin: 0;
+    }
+
+    #home-button {
+      padding: 12px 25px; /* Plus de padding */
+      background-color: var(--dark-gray); /* Gris foncé pour le bouton home */
+      color: white;
+      border: none;
+      border-radius: 10px; /* Plus arrondi */
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: flex; /* Pour aligner l'icône et le texte */
+      align-items: center;
+      gap: 8px; /* Espacement icône/texte */
+    }
+
+    #home-button:hover {
+      background-color: #5a6268;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    p#date, p#heure {
+      font-size: 1em; /* Plus grand */
+      color: #7f8c8d; /* Gris plus doux */
+      margin-top: -10px; /* Remonte un peu */
+      margin-bottom: 20px;
+      text-align: right; /* Aligne date/heure à droite */
+    }
+
+   
+    #tabs-professeur, #tabs-admin, #tabs-user, #tabs-greta {
+      margin-top: 20px;
+      margin-bottom: 25px; /* Plus d'espace sous les onglets */
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px; /* Plus d'espacement entre les boutons d'onglet */
+      background-color: var(--light-gray); /* Fond clair pour la barre d'onglets */
+      padding: 10px;
+      border-radius: 15px; /* Bords arrondis pour la barre d'onglets */
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* Ombre interne subtile */
+    }
+
+    #tabs-professeur button, #tabs-admin button, #tabs-user button, #tabs-greta button {
+      background-color: transparent; /* Fond transparent pour les onglets inactifs */
+      border: none; /* Pas de bordure par défaut */
+      padding: 14px 22px; /* Plus de padding */
+      cursor: pointer;
+      font-weight: 600; /* Plus gras */
+      font-size: 1em; /* Taille standard */
+      border-radius: 10px; /* Bords plus arrondis pour les boutons d'onglet */
+      transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease, transform 0.2s ease;
+      display: flex; /* Pour les icônes */
+      align-items: center;
+      gap: 8px; /* Espacement icône/texte */
+      color: var(--dark-gray); /* Couleur de texte par défaut */
+    }
+
+    #tabs-professeur button:hover, #tabs-admin button:hover, #tabs-user button:hover, #tabs-greta button:hover {
+      background-color: rgba(0, 123, 255, 0.08); /* Effet de survol léger */
+      color: var(--primary-blue);
+      transform: translateY(-2px); /* Léger soulèvement */
+    }
+
+    #tabs-professeur button.active, #tabs-admin button.active, #tabs-user button.active, #tabs-greta button.active {
+      background-color: var(--primary-blue); /* Fond plein pour l'onglet actif */
+      color: white; /* Texte blanc */
+      border-bottom: none; /* Pas de bordure inférieure pour l'onglet actif */
+      box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); /* Ombre pour l'onglet actif */
+      transform: translateY(-3px); /* Plus grand soulèvement */
+      z-index: 2; /* S'assure que l'onglet actif est au-dessus */
+      position: relative; /* Nécessaire pour z-index */
+    }
+
+    /* Couleurs spécifiques pour les onglets actifs par rôle */
+    #tabs-admin button.active { background-color: var(--danger-red); box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3); }
+    #tabs-greta button.active { background-color: var(--success-green); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3); }
+    #tabs-professeur button.active { background-color: var(--warning-orange); box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3); }
+    #tabs-user button.active { background-color: var(--accent-purple); box-shadow: 0 5px 15px rgba(142, 68, 173, 0.3); }
+
+
+    /* Contenu des onglets */
+    .tab-content {
+      display: none;
+      padding: 30px; /* Plus de padding */
+      border-radius: 15px; /* Plus arrondi */
+      background-color: var(--card-background);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Ombre légère */
+      min-height: 400px; /* Hauteur minimale pour les contenus */
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-content h2 {
+      color: var(--dark-gray); /* Couleur de titre de section */
+      font-size: 2em; /* Grande taille de titre */
+      font-weight: 700;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 15px;
+      margin-top: 0;
+      margin-bottom: 30px; /* Plus d'espace */
+      display: flex;
+      align-items: center;
+      gap: 12px; /* Espacement icône/texte */
+    }
+    .tab-content h2 i {
+        color: var(--primary-blue); /* Couleur par défaut pour les icônes de titre */
+    }
+    /* Couleurs des icônes de titre selon le rôle */
+    #professeur-section h2 i { color: var(--warning-orange); }
+    #admin-section h2 i { color: var(--danger-red); }
+    #user-section h2 i { color: var(--accent-purple); }
+    #greta-section h2 i { color: var(--success-green); }
+
+
+    /* iframe emploi du temps */
+    .emploi-du-temps iframe {
+      width: 100%;
+      height: 650px; /* Plus grand */
+      border: 1px solid var(--border-color);
+      border-radius: 12px; /* Plus arrondi */
+      box-shadow: 0 5px 20px var(--shadow-light);
+    }
+
+    /* Bouton de téléchargement PDF */
+    button.pdf-download {
+      margin-top: 30px; /* Plus d'espace */
+      padding: 14px 25px; /* Plus de padding */
+      background-color: var(--success-green);
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 10px; /* Plus arrondi */
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    button.pdf-download:hover {
+      background-color: #28a645;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(46, 204, 113, 0.35);
+    }
+
+    /* Styles pour les listes de présence et éléments de formulaire */
+    /* .presence-item (pour récaps NFC et listes générales) */
+    #recap-nfc-list-prof li, #recap-nfc-list-admin li,
+    #presence-list-prof li, #presence-list-admin li, #user-recap li,
+    #releve-etudiant-list li, #releve-prof-list li {
+      margin-bottom: 15px; /* Plus d'espacement */
+      padding: 18px 25px; /* Plus de padding */
+      background-color: var(--light-gray); /* Fond clair */
+      border: 1px solid var(--border-color);
+      border-radius: 12px; /* Plus arrondi */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); /* Ombre légère */
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #recap-nfc-list-prof li:hover, #recap-nfc-list-admin li:hover,
+    #presence-list-prof li:hover, #presence-list-admin li:hover, #user-recap li:hover,
+    #releve-etudiant-list li:hover, #releve-prof-list li:hover {
+        transform: translateY(-3px); /* Soulèvement au survol */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    p.italic-underline {
+      margin: 25px 0; /* Plus d'espace */
+      font-style: italic;
+      text-decoration: underline;
+      color: #7f8c8d;
+      font-size: 1.05em; /* Légèrement plus grand */
+    }
+
+    /* Tableau de présences */
+    table {
+      width: 100%;
+      border-collapse: separate; /* Permet border-radius sur tr */
+      border-spacing: 0; /* Supprime l'espacement entre les cellules */
+      margin-top: 25px; /* Plus d'espace */
+      background-color: var(--card-background);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border-radius: 15px; /* Plus arrondi */
+      overflow: hidden; /* Pour les coins arrondis */
+    }
+    table thead tr {
+        background-color: var(--primary-blue); /* En-tête bleu */
+        color: white;
+    }
+    table th, table td {
+      padding: 15px; /* Plus de padding */
+      text-align: left;
+      border-bottom: 1px solid var(--border-color); /* Ligne de séparation */
+    }
+    table th {
+      font-weight: 600; /* Plus gras */
+      font-size: 1.1em;
+    }
+    table tbody tr:nth-child(even) {
+      background-color: var(--light-gray); /* Lignes alternées */
+    }
+    table tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.05); /* Léger survol */
+        transform: scale(1.005); /* Très léger agrandissement */
+    }
+    /* Coins arrondis pour la première et dernière cellule de l'en-tête */
+    table th:first-child { border-top-left-radius: 15px; }
+    table th:last-child { border-top-right-radius: 15px; }
+
+    select, input[type="checkbox"] {
+      padding: 10px; /* Plus de padding */
+      border-radius: 8px; /* Plus arrondi */
+      border: 1px solid var(--medium-gray);
+      font-size: 1em;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    select:focus, input[type="checkbox"]:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    }
+
+    /* Boutons d'action dans les listes (modifier / réinitialiser / supprimer) */
+    .presence-buttons button {
+      margin-left: 15px; /* Plus d'espace */
+      padding: 8px 15px; /* Plus de padding */
+      font-size: 0.9em;
+      cursor: pointer;
+      border-radius: 8px; /* Plus arrondi */
+      border: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .presence-buttons button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .presence-buttons button:first-child { /* Modifier sortie (Jaune) */
+      background-color: var(--warning-orange);
+      color: white; /* Texte blanc */
+    }
+    .presence-buttons button:first-child:hover {
+        background-color: #e0a800;
+    }
+    .presence-buttons button:nth-child(2) { /* Réinitialiser sortie (Bleu ciel) */
+      background-color: #17a2b8; /* Cyan */
+      color: white;
+    }
+    .presence-buttons button:nth-child(2):hover {
+        background-color: #138496;
+    }
+    .presence-buttons button:last-child { /* Supprimer (Rouge) */
+      background-color: var(--danger-red);
+      color: white;
+    }
+    .presence-buttons button:last-child:hover {
+        background-color: #c82333;
+    }
+
+    /* Styles pour les boutons "Scanner NFC" / "Scanner Entrée" */
+    #btn-nfc-prof, #btn-entree-prof,
+    #btn-nfc-admin, #btn-entree-admin,
+    #btn-nfc-user, #btn-entree-user {
+        background-color: var(--primary-blue);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.2em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        margin-right: 20px; /* Espacement entre les boutons */
+        margin-bottom: 20px; /* Espacement avec le texte */
+        display: inline-flex; /* Pour les icônes */
+        align-items: center;
+        gap: 10px;
+    }
+    #btn-nfc-prof:hover, #btn-entree-prof:hover,
+    #btn-nfc-admin:hover, #btn-entree-admin:hover,
+    #btn-nfc-user:hover, #btn-entree-user:hover {
+        background-color: var(--primary-dark-blue);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+    }
+    /* Style pour le bouton Valider les présences NFC */
+    button[onclick="validerPresencesNFC()"] {
+        background-color: var(--success-green);
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        margin-top: 20px;
+    }
+    button[onclick="validerPresencesNFC()"]:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(46, 204, 113, 0.3);
+    }
+
+    /* Styles pour le formulaire d'inscription (Admin) */
+    #inscription-admin .form-group {
+        display: flex; /* Utilise flexbox pour l'alignement */
+        align-items: center;
+        margin-bottom: 20px; /* Plus d'espace entre les groupes */
+    }
+    #inscription-admin label {
+        flex: 0 0 150px; /* Largeur fixe pour les labels */
+        text-align: right;
+        padding-right: 20px;
+        font-weight: 600;
+        color: var(--dark-gray);
+        font-size: 1.05em;
+    }
+    #inscription-admin input[type="text"],
+    #inscription-admin input[type="password"] {
+        flex: 1; /* L'input prend le reste de l'espace */
+        padding: 12px; /* Plus de padding */
+        border: 1px solid var(--medium-gray);
+        border-radius: 8px;
+        font-size: 1.1em;
+        color: var(--text-color);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    #inscription-admin input[type="text"]:focus,
+    #inscription-admin input[type="password"]:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+    }
+    #inscription-admin button {
+        background-color: var(--primary-blue);
+        color: white;
+        padding: 14px 28px; /* Plus de padding */
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1.2em;
+        margin-top: 20px; /* Plus d'espace au-dessus */
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    #inscription-admin button:hover {
+        background-color: var(--primary-dark-blue);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+    }
+
+    /* Styles pour les justificatifs (User) */
+    #justificatif-user input[type="text"] { /* Motif */
+        width: calc(100% - 20px); /* Ajuste la largeur */
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid var(--medium-gray);
+        border-radius: 8px;
+        font-size: 1.1em;
+    }
+    #justificatif-user input[type="file"] {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid var(--medium-gray);
+        border-radius: 8px;
+        background-color: var(--light-gray);
+        cursor: pointer;
+        width: calc(100% - 20px);
+    }
+    #justificatif-user button {
+        background-color: var(--success-green);
+        color: white;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.2em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    #justificatif-user button:hover {
+        background-color: #218838;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
+    }
+
+    /* Styles spécifiques pour les relevés GRETA */
+    #releve-etudiant-list li, #releve-prof-list li {
+        background-color: #e8f5e9; /* Fond vert très clair pour GRETA */
+        border-color: #c8e6c9;
+        font-size: 1em;
+        color: var(--text-color);
+    }
+    #releve-etudiant-list li strong, #releve-prof-list li strong {
+        color: var(--success-green); /* Nom/Prénom en vert accent */
+        font-size: 1.1em;
+    }
+
+    /* Styles pour les sections nécessitant un mot de passe (Récap Prof/Admin) */
+    .tab-content input[type="password"] {
+        width: 300px; /* Largeur fixe pour ces champs de mot de passe */
+        padding: 12px;
+        margin-right: 15px;
+        border: 1px solid var(--medium-gray);
+        border-radius: 8px;
+        font-size: 1.1em;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .tab-content input[type="password"]:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+    }
+    .tab-content button[onclick*="Access"] {
+        background-color: var(--primary-blue);
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .tab-content button[onclick*="Access"]:hover {
+        background-color: var(--primary-dark-blue);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+    }
+    /* Style pour les listes après authentification */
+    #presence-list-prof, #presence-list-admin {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+    #presence-list-prof li, #presence-list-admin li {
+        color: var(--dark-gray);
+        font-weight: normal;
+        background-color: #f0f4f7; /* Fond légèrement différent */
+        border-color: #dbe4eb;
+    }
+
+    /* Responsivité de base */
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 30px;
+      }
+      .welcome-banner h1 {
+        font-size: 2.8em;
+      }
+      #login-logo-container {
+        flex-direction: column;
+        top: 15px;
+        right: 15px;
+        gap: 10px;
+      }
+      #login-logo-container img {
+        width: 70px;
+      }
+      #app {
+        padding: 15px;
+        margin: 15px auto;
+      }
+      .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      #welcome-title {
+        font-size: 2em;
+      }
+      #tabs-professeur button, #tabs-admin button, #tabs-user button, #tabs-greta button {
+        width: 100%; /* Les onglets prennent toute la largeur sur mobile */
+        margin-right: 0;
+        border-radius: 8px;
+      }
+      .tab-content h2 {
+        font-size: 1.8em;
+      }
+      #inscription-admin .form-group {
+          flex-direction: column;
+          align-items: flex-start;
+      }
+      #inscription-admin label {
+          text-align: left;
+          padding-right: 0;
+          margin-bottom: 5px;
+          width: auto;
+      }
+      #inscription-admin input {
+          width: 100%;
+      }
+      .presence-buttons button {
+          margin-left: 0;
+          margin-top: 10px;
+          width: 100%;
+      }
+      #recap-nfc-list-prof li, #recap-nfc-list-admin li,
+      #presence-list-prof li, #presence-list-admin li, #user-recap li,
+      #releve-etudiant-list li, #releve-prof-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#007bff" />
+
+</head>
+<body>
+  <div id="login-logo-container">
+    <img src="images/logo-univantilles.png" alt="Université des Antilles" class="secondary-logo" />
+    <img src="images/logo-miage.png" alt="MIAGE Antilles" class="primary-logo" />
+  </div>
+
+  <div class="welcome-banner" id="welcome-message-container">
+    <h1>Bienvenue !</h1>
+  </div>
+
+  <div class="login-container">
+    <h1>Connexion</h1>
+    <input id="login" placeholder="Login" type="text" />
+    <input id="password" placeholder="Password" type="password" />
+    <button onclick="handleLogin()">Se connecter <i class="fas fa-sign-in-alt"></i></button>
+  </div>
+
+  <footer id="login-footer-text">
+    <p>&copy; 2025. Tous droits réservés.</p>
+  </footer>
+
+  <div id="app" style="display:none;">
+    <div class="app-header">
+      <h1 id="welcome-title"></h1>
+      <button id="home-button" onclick="goHome()">
+        <i class="fas fa-home"></i> Home
+      </button>
+    </div>
+    <p id="date"></p>
+    <p id="heure"></p>
+
+    <div id="tabs-professeur" style="display:none;">
+      <button data-tab="emargement-prof" class="active"><i class="fas fa-thumbtack"></i> Émargement</button>
+      <button data-tab="recap-nfc-prof"><i class="fas fa-mobile-alt"></i> Récap NFC</button>
+      <button data-tab="cahier-prof"><i class="fas fa-book"></i> Cahier de texte</button>
+      <button data-tab="tableau-prof"><i class="fas fa-clipboard-list"></i> Tableau de présences</button>
+      <button data-tab="releve-prof"><i class="fas fa-file-alt"></i> Relevé mensuel</button>
+      <button data-tab="recap-professeur"><i class="fas fa-lock"></i> Récap global</button>
+      <button data-tab="emploi-du-temps-prof"><i class="fas fa-calendar-alt"></i> Emploi du temps</button>
+    </div>
+
+    <div id="tabs-admin" style="display:none;">
+      <button data-tab="emargement-admin" class="active"><i class="fas fa-thumbtack"></i> Émargement</button>
+      <button data-tab="recap-nfc-admin"><i class="fas fa-mobile-alt"></i> Récap NFC</button>
+      <button data-tab="cahier-admin"><i class="fas fa-book"></i> Cahier de texte</button>
+      <button data-tab="tableau-admin"><i class="fas fa-clipboard-list"></i> Tableau de présences</button>
+      <button data-tab="releve-admin"><i class="fas fa-file-alt"></i> Relevé mensuel</button>
+      <button data-tab="recap-admin"><i class="fas fa-lock"></i> Récap global</button>
+      <button data-tab="emploi-du-temps-admin"><i class="fas fa-calendar-alt"></i> Emploi du temps</button>
+      <button data-tab="inscription-admin"><i class="fas fa-user-plus"></i> Inscription</button>
+    </div>
+
+    <div id="tabs-user" style="display:none;">
+      <button data-tab="emargement-user" class="active"><i class="fas fa-thumbtack"></i> Émargement</button>
+      <button data-tab="justificatif-user"><i class="fas fa-upload"></i> Déposer justificatif</button>
+      <button data-tab="recap-user"><i class="fas fa-calendar-check"></i> Récapitulatif mensuel</button>
+      <button data-tab="emploi-du-temps-user"><i class="fas fa-calendar-alt"></i> Emploi du temps</button>
+    </div>
+
+    <div id="tabs-greta" style="display:none;">
+      <button data-tab="cahier-greta" class="active"><i class="fas fa-book-reader"></i> Cahier de textes</button>
+      <button data-tab="releve-etudiant-greta"><i class="fas fa-user-graduate"></i> Relevé étudiant</button>
+      <button data-tab="releve-prof-greta"><i class="fas fa-chalkboard-teacher"></i> Relevé professeur</button>
+    </div>
+
+    <div id="professeur-section" style="display:none;">
+      <div id="emargement-prof" class="tab-content active">
+        <h2><i class="fas fa-thumbtack"></i> Émargement</h2>
+        <button onclick="handleScanProfesseur()" id="btn-nfc-prof"><i class="fas fa-broadcast-tower"></i> Scanner NFC</button>
+        <p class="italic-underline">
+          Le cours est en distanciel ? Merci d'émarger manuellement avec le bouton ci-dessous
+        </p>
+        <button onclick="handleScanProfesseur()" id="btn-entree-prof"><i class="fas fa-fingerprint"></i> Émarger Entrée / Sortie</button>
+      </div>
+
+      <div id="recap-nfc-prof" class="tab-content">
+        <h2><i class="fas fa-mobile-alt"></i> Récapitulatif des présences NFC</h2>
+        <ul id="recap-nfc-list-prof"></ul>
+        <button onclick="validerPresencesNFC()"><i class="fas fa-check-circle"></i> Valider les présences</button>
+      </div>
+
+      <div id="cahier-prof" class="tab-content">
+  <h2><i class="fas fa-book"></i> Cahier de texte</h2>
+  
+  <label for="date-cahier" style="display:block; margin-top:10px;">Choisir la date :</label>
+  <input type="date" id="date-cahier" style="
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--medium-gray);
+    margin-bottom: 20px;
+    width: 250px;
+  " />
+  
+  <label for="contenu-cahier" style="margin-top:20px; display:block;">Contenu du cahier :</label>
+  <textarea id="contenu-cahier" rows="8" style="
+    width: 100%;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 20px;
+  " placeholder="Écrire le contenu du cours ici..."></textarea>
+  
+  <button onclick="validerCahierProf()" style="
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  ">
+    <i class="fas fa-save"></i> Valider
+  </button>
+</div>
+
+
+      <div id="tableau-prof" class="tab-content">
+        <h2><i class="fas fa-clipboard-list"></i> Tableau de présences</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Présence</th>
+              <th>Justificatif</th>
+            </tr>
+          </thead>
+          <tbody id="professeur-table"></tbody>
+        </table>
+        <button onclick="handleValiderTableauProf()"><i class="fas fa-save"></i> Valider le tableau</button>
+      </div>
+
+      <div id="releve-prof" class="tab-content">
+        <h2><i class="fas fa-file-alt"></i> Relevé mensuel d'absence par étudiant</h2>
+        <p>[📄 Tableau des absences par étudiant généré ici]</p>
+      </div>
+
+      <div id="recap-professeur" class="tab-content">
+        <h2><i class="fas fa-lock"></i> Récapitulatif global des présences</h2>
+        <p>Accès sécurisé. Veuillez entrer votre mot de passe pour consulter le récapitulatif.</p>
+        <input id="profCheck" type="password" placeholder="Mot de passe professeur" />
+        <button onclick="handleProfesseurAccess()"><i class="fas fa-unlock-alt"></i> Accéder</button>
+        <ul id="presence-list-prof"></ul>
+      </div>
+
+      <div id="emploi-du-temps-prof" class="tab-content emploi-du-temps">
+        <h2><i class="fas fa-calendar-alt"></i> Emploi du temps MIAGE</h2>
+        <iframe
+          src="https://calendar.google.com/calendar/embed?src=tm1s5vf5vviv3q9qtir2r1i5pc%40group.calendar.google.com&ctz=America%2FMartinique&mode=WEEK"
+          frameborder="0" scrolling="no"
+        ></iframe>
+      </div>
+    </div>
+
+    <div id="admin-section" style="display:none;">
+      <div id="emargement-admin" class="tab-content active">
+        <h2><i class="fas fa-thumbtack"></i> Émargement</h2>
+        <button onclick="handleScanAdmin()" id="btn-nfc-admin"><i class="fas fa-broadcast-tower"></i> Scanner NFC</button>
+        <p class="italic-underline">
+          Le cours est en distanciel ? Merci d'émarger manuellement avec le bouton ci-dessous
+        </p>
+        <button onclick="handleScanAdmin()" id="btn-entree-admin"><i class="fas fa-fingerprint"></i> Émarger Entrée / Sortie</button>
+      </div>
+
+      <div id="recap-nfc-admin" class="tab-content">
+        <h2><i class="fas fa-mobile-alt"></i> Récapitulatif des présences NFC</h2>
+        <ul id="recap-nfc-list-admin"></ul>
+        <button onclick="validerPresencesNFC()"><i class="fas fa-check-circle"></i> Valider les présences</button>
+      </div>
+
+      <div id="cahier-admin" class="tab-content">
+        <h2><i class="fas fa-book"></i> Cahier de texte</h2>
+        <p>[📑 Contenu des cours et notes de séances à implémenter ici]</p>
+      </div>
+
+      <div id="tableau-admin" class="tab-content">
+        <h2><i class="fas fa-clipboard-list"></i> Tableau de présences</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Présence</th>
+              <th>Justificatif</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table"></tbody>
+        </table>
+        <button onclick="handleValiderTableauAdmin()"><i class="fas fa-save"></i> Valider le tableau</button>
+      </div>
+
+      <div id="recap-admin" class="tab-content">
+        <h2><i class="fas fa-lock"></i> Récapitulatif global des présences</h2>
+        <p>Accès sécurisé. Veuillez entrer votre mot de passe pour consulter le récapitulatif.</p>
+        <input id="adminCheck" type="password" placeholder="Mot de passe administrateur" />
+        <button onclick="handleAdminAccess()"><i class="fas fa-unlock-alt"></i> Accéder</button>
+        <ul id="presence-list-admin"></ul>
+      </div>
+
+      <div id="emploi-du-temps-admin" class="tab-content emploi-du-temps">
+        <h2><i class="fas fa-calendar-alt"></i> Emploi du temps MIAGE</h2>
+        <iframe
+          src="https://calendar.google.com/calendar/embed?src=tm1s5vf5vviv3q9qtir2r1i5pc%40group.calendar.google.com&ctz=America%2FMartinique&mode=WEEK"
+          frameborder="0" scrolling="no"
+        ></iframe>
+      </div>
+
+      <div id="inscription-admin" class="tab-content">
+        <h2><i class="fas fa-user-plus"></i> Inscription étudiant</h2>
+        <div class="form-group">
+            <label for="insc-nom">Nom : </label>
+            <input type="text" id="insc-nom" />
+        </div>
+        <div class="form-group">
+            <label for="insc-prenom">Prénom : </label>
+            <input type="text" id="insc-prenom" />
+        </div>
+        <div class="form-group">
+            <label for="insc-login">Login : </label>
+            <input type="text" id="insc-login" />
+        </div>
+        <div class="form-group">
+            <label for="insc-mdp">Mot de passe : </label>
+            <input type="password" id="insc-mdp" />
+        </div>
+        <button onclick="handleInscription()"><i class="fas fa-user-check"></i> Valider l'inscription</button>
+      </div>
+    </div>
+
+    <div id="user-section" style="display:none;">
+      <div id="emargement-user" class="tab-content active">
+        <h2><i class="fas fa-thumbtack"></i> Émargement</h2>
+        <button onclick="handleScanUser()" id="btn-nfc-user"><i class="fas fa-broadcast-tower"></i> Scanner NFC</button>
+        <p class="italic-underline">
+          Le cours est en distanciel ? Merci d'émarger manuellement avec le bouton ci-dessous
+        </p>
+        <button onclick="handleScanUser()" id="btn-entree-user"><i class="fas fa-fingerprint"></i> Émarger Entrée / Sortie</button>
+      </div>
+
+      <div id="justificatif-user" class="tab-content">
+        <h2><i class="fas fa-upload"></i> Déposer un justificatif d'absence</h2>
+        <input id="motif" type="text" placeholder="Motif d'absence" />
+        <input id="file" type="file" />
+        <button onclick="handleJustifSubmit()"><i class="fas fa-paper-plane"></i> Envoyer le justificatif</button>
+      </div>
+
+      <div id="recap-user" class="tab-content">
+        <h2><i class="fas fa-calendar-check"></i> Récapitulatif mensuel des présences/absences</h2>
+        <ul id="user-recap"></ul>
+      </div>
+
+      <div id="emploi-du-temps-user" class="tab-content emploi-du-temps">
+        <h2><i class="fas fa-calendar-alt"></i> Emploi du temps MIAGE</h2>
+        <iframe
+          src="https://calendar.google.com/calendar/embed?src=tm1s5vf5vviv3q9qtir2r1i5pc%40group.calendar.google.com&ctz=America%2FMartinique&mode=WEEK"
+          frameborder="0" scrolling="no"
+        ></iframe>
+      </div>
+    </div>
+
+    <div id="greta-section" style="display:none;">
+      <div id="cahier-greta" class="tab-content active">
+        <h2><i class="fas fa-book-reader"></i> Consulter le cahier de textes</h2>
+        <p>[📑 Contenu détaillé du cahier de textes consultable par GRETA]</p>
+      </div>
+
+      <div id="releve-etudiant-greta" class="tab-content">
+        <h2><i class="fas fa-user-graduate"></i> Relevé des présences/absences par étudiant</h2>
+        <div id="releve-etudiant-content">
+          <p>Liste des présences et absences par étudiant :</p>
+          <ul id="releve-etudiant-list"></ul>
+        </div>
+        <button class="pdf-download" onclick="downloadPDF('releve-etudiant-content', 'Releve_Etudiant')"><i class="fas fa-file-pdf"></i> Télécharger PDF</button>
+      </div>
+
+      <div id="releve-prof-greta" class="tab-content">
+        <h2><i class="fas fa-chalkboard-teacher"></i> Relevé des présences des professeurs</h2>
+        <div id="releve-prof-content">
+          <p>Liste des présences des professeurs :</p>
+          <ul id="releve-prof-list"></ul>
+        </div>
+        <button class="pdf-download" onclick="downloadPDF('releve-prof-content', 'Releve_Prof')"><i class="fas fa-file-pdf"></i> Télécharger PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const { jsPDF } = window.jspdf;
+
+  // URL de ton API PHP pour login
+  const LOGIN_API_URL = 'http://192.168.2.1/login.php';
+
+  let currentUser = null;
+  let isProfesseurAuthenticated = false;
+  let isAdminAuthenticated = false;
+
+  // Affichage date et heure
+  function updateDateHeure() {
+    document.getElementById('date').textContent = 'Date actuelle : ' + new Date().toLocaleDateString();
+    document.getElementById('heure').textContent = 'Heure actuelle : ' + new Date().toLocaleTimeString();
+  }
+  setInterval(updateDateHeure, 1000);
+  updateDateHeure();
+
+  // Gestion affichage des sections selon le rôle
+  function showSectionForUser() {
+
+    if (currentUser.role.toLowerCase() === 'etudiant') {
+    currentUser.role = 'user';
+    }
+    if (currentUser.role.toLowerCase() === 'enseignant') {
+    currentUser.role = 'professeur';
+  }
+
+  const role = currentUser.role.toLowerCase();
+  document.getElementById('professeur-section').style.display = 'none';
+  document.getElementById('admin-section').style.display = 'none';
+  document.getElementById('user-section').style.display = 'none';
+  document.getElementById('greta-section').style.display = 'none';
+
+  document.getElementById('tabs-professeur').style.display = 'none';
+  document.getElementById('tabs-admin').style.display = 'none';
+  document.getElementById('tabs-user').style.display = 'none';
+  document.getElementById('tabs-greta').style.display = 'none';
+
+  document.getElementById('home-button').style.display = 'inline-block';
+
+  if (role === 'professeur') {
+    document.getElementById('professeur-section').style.display = 'block';
+    document.getElementById('tabs-professeur').style.display = 'flex';
+    activateTab('tabs-professeur', 'emargement-prof');
+  } else if (role === 'admin') {
+    document.getElementById('admin-section').style.display = 'block';
+    document.getElementById('tabs-admin').style.display = 'flex';
+    activateTab('tabs-admin', 'emargement-admin');
+  } else if (role === 'user') {
+    document.getElementById('user-section').style.display = 'block';
+    document.getElementById('tabs-user').style.display = 'flex';
+    activateTab('tabs-user', 'emargement-user');
+  } else if (role === 'greta') {
+    document.getElementById('greta-section').style.display = 'block';
+    document.getElementById('tabs-greta').style.display = 'flex';
+    activateTab('tabs-greta', 'cahier-greta');
+  }
+
+  document.getElementById('welcome-title').textContent = `Bienvenue ${currentUser.prenom} ${currentUser.nom} (${currentUser.role})`;
+}
+
+
+  // Activation onglet
+  function activateTab(tabsId, tabToShow) {
+    const tabs = document.getElementById(tabsId);
+    if (!tabs) return;
+
+    const parentSection = tabs.closest('div[id$="-section"]');
+    if (parentSection) {
+      [...parentSection.querySelectorAll('.tab-content')].forEach(content => {
+        content.classList.remove('active');
+      });
+    }
+
+    [...tabs.children].forEach(btn => btn.classList.remove('active'));
+
+    const activeButton = tabs.querySelector(`button[data-tab="${tabToShow}"]`);
+    const activeContent = document.getElementById(tabToShow);
+    if (activeButton) activeButton.classList.add('active');
+    if (activeContent) activeContent.classList.add('active');
+  }
+
+  function setupTabListeners() {
+    ['tabs-professeur', 'tabs-admin', 'tabs-user', 'tabs-greta'].forEach(tabsId => {
+      const tabsElement = document.getElementById(tabsId);
+      if (tabsElement) {
+        tabsElement.addEventListener('click', e => {
+          const clickedButton = e.target.closest('button');
+          if (clickedButton && clickedButton.dataset.tab) {
+            activateTab(tabsId, clickedButton.dataset.tab);
+          }
+        });
+      }
+    });
+  }
+  setupTabListeners();
+
+  // ✅ NOUVELLE VERSION AVEC FETCH
+  async function handleLogin() {
+    const login = document.getElementById('login').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if (!login || !password) {
+      alert('Veuillez remplir les champs.');
+      return;
+    }
+
+    try {
+      const response = await fetch(LOGIN_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login, password })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur serveur : ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        currentUser = {
+          login: login,
+          nom: data.nom,
+          prenom: data.prenom,
+          role: data.role
+        };
+        afterLogin();
+      } else {
+        alert(data.message || 'Login ou mot de passe incorrect.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Erreur de connexion au serveur. Vérifiez votre réseau ou l\'API.');
+    }
+  }
+
+  function validerCahierProf() {
+  const date = document.getElementById('date-cahier').value;
+  const contenu = document.getElementById('contenu-cahier').value.trim();
+
+  if (!date) {
+    alert('Veuillez sélectionner une date.');
+    return;
+  }
+
+  if (!contenu) {
+    alert('Veuillez écrire le contenu du cahier de texte.');
+    return;
+  }
+
+  // Exemple : simuler un enregistrement
+  alert(`Cahier de texte enregistré pour le ${date} :\n\n${contenu}`);
+
+  // Reset des champs
+  document.getElementById('date-cahier').value = '';
+  document.getElementById('contenu-cahier').value = '';
+}
+
+
+    // Actions après une connexion réussie
+function afterLogin() {
+
+  console.log('role reçu du serveur :', currentUser.role);
+
+
+  document.getElementById('app').style.display = 'flex'; // Affiche l'application
+  document.querySelector('.login-container').style.display = 'none'; // Cache le conteneur de connexion
+  document.getElementById('welcome-message-container').style.display = 'none'; // Cache le message de bienvenue
+  document.getElementById('login-logo-container').style.display = 'none'; // Cache le logo
+  document.getElementById('login-footer-text').style.display = 'none'; // Cache le pied de page
+  document.body.classList.add('app-active'); // Ajoute la classe pour l'application (modifie le fond)
+  showSectionForUser(); // Affiche les éléments spécifiques au rôle
+}
+
+    // Gère le retour à la page de connexion
+    function goHome() {
+      document.getElementById('app').style.display = 'none'; // Cache l'application
+      document.querySelector('.login-container').style.display = 'block'; // Correction ici : flex -> block pour revenir à la mise en page initiale
+      document.getElementById('welcome-message-container').style.display = 'block'; // Réaffiche le message de bienvenue
+      document.getElementById('login-logo-container').style.display = 'flex'; // Réaffiche le logo
+      document.getElementById('login-footer-text').style.display = 'block'; // Réaffiche le pied de page
+      document.body.classList.remove('app-active'); // Retire la classe au retour à la connexion (remet le fond original)
+
+      // Réinitialise l'utilisateur et les états d'authentification
+      currentUser = null;
+      isAdminAuthenticated = false;
+      isProfesseurAuthenticated = false;
+
+      // Cache toutes les sections (prof, admin, user, greta)
+      document.getElementById('professeur-section').style.display = 'none';
+      document.getElementById('admin-section').style.display = 'none';
+      document.getElementById('user-section').style.display = 'none';
+      document.getElementById('greta-section').style.display = 'none';
+
+      // Réinitialise les champs de connexion
+      document.getElementById('login').value = '';
+      document.getElementById('password').value = '';
+
+      // Cache le bouton Home
+      document.getElementById('home-button').style.display = 'none';
+
+      // Réinitialise le titre de bienvenue, la date et l'heure (qui seront mis à jour au prochain login)
+      document.getElementById('welcome-title').textContent = '';
+      document.getElementById('date').textContent = '';
+      document.getElementById('heure').textContent = '';
+
+      // Réinitialise l'état actif des onglets (important pour un retour propre)
+      ['tabs-professeur','tabs-admin','tabs-user','tabs-greta'].forEach(tid => {
+        const tabs = document.getElementById(tid);
+        if (tabs) {
+          [...tabs.children].forEach(btn => btn.classList.remove('active'));
+        }
+      });
+    }
+
+    // --- Fonctions PROFESSEUR ---
+
+    // Stockage simulé des présences pour prof
+    let presencesProfesseur = [];
+
+    // Vérifie si la présence du professeur a déjà été scannée pour la demi-journée
+    function presenceProfDejaScannee(demiJournee) {
+      return presencesProfesseur.some(p => p.nom === professeurIdentity.nom && p.prenom === professeurIdentity.prenom && p.demiJournee === demiJournee);
+    }
+
+    // Gère le scan (simulé) NFC/Manuel pour le professeur
+    function handleScanProfesseur() {
+      if (currentUser.role !== 'professeur') {
+        alert('Accès refusé : vous n\'êtes pas professeur.');
+        return;
+      }
+      const now = new Date();
+      const demiJournee = (now.getHours() < 12) ? 'matin' : 'après-midi';
+
+      if (presenceProfDejaScannee(demiJournee)) {
+        alert(`Vous avez déjà scanné votre présence pour la demi-journée ${demiJournee}.`);
+        return;
+      }
+
+      const entree = now.toLocaleTimeString();
+      const sortie = (demiJournee === 'matin') ? '12:00:00' : '18:00:00'; // Heure de sortie par défaut
+
+      presencesProfesseur.push({
+        nom: professeurIdentity.nom,
+        prenom: professeurIdentity.prenom,
+        entree,
+        sortie,
+        demiJournee,
+        date: now.toLocaleDateString('fr-FR') // Ajoute la date pour le suivi
+      });
+
+      alert(`Présence enregistrée pour ${professeurIdentity.prenom} ${professeurIdentity.nom} à ${entree} (demi-journée ${demiJournee}).`);
+      renderNFCPresencesProf(); // Met à jour la liste des présences NFC
+    }
+
+    // Affiche le récapitulatif des présences NFC du professeur
+    function renderNFCPresencesProf() {
+      const ul = document.getElementById('recap-nfc-list-prof');
+      ul.innerHTML = ''; // Vide la liste avant de la recréer
+
+      // On affiche les présences du professeur du jour actuel
+      const today = new Date().toLocaleDateString('fr-FR');
+      const presencesToday = presencesProfesseur.filter(p => p.date === today);
+
+      if (presencesToday.length === 0) {
+          ul.innerHTML = '<li>Aucune présence enregistrée pour aujourd\'hui.</li>';
+          return;
+      }
+
+      presencesToday.forEach((p, i) => {
+        const li = document.createElement('li');
+        li.className = 'presence-item';
+        li.innerHTML = `
+          <strong>${p.nom} ${p.prenom}</strong> – Entrée : ${p.entree}  <span id="sortie-nfc-prof-${i}"> – Sortie : ${p.sortie}</span> (${p.demiJournee})
+          <span class="presence-buttons">
+            <button onclick="modifierSortieProf(${i})"><i class="fas fa-edit"></i> Modifier sortie</button>
+            <button onclick="reinitialiserSortieProf(${i})"><i class="fas fa-redo-alt"></i> Réinitialiser sortie</button>
+            <button onclick="supprimerPresenceProf(${i})"><i class="fas fa-trash-alt"></i> Supprimer</button>
+          </span>
+        `;
+        ul.appendChild(li);
+      });
+    }
+
+    // Modifie l'heure de sortie d'une présence du professeur
+    function modifierSortieProf(index) {
+      const now = new Date();
+      const heure = now.toLocaleTimeString();
+      presencesProfesseur[index].sortie = heure;
+      document.getElementById(`sortie-nfc-prof-${index}`).textContent = ` – Sortie : ${heure}`;
+      alert(`Sortie modifiée à ${heure} pour ${presencesProfesseur[index].prenom} ${presencesProfesseur[index].nom}.`);
+    }
+
+    // Réinitialise l'heure de sortie à sa valeur par défaut (12h ou 18h)
+    function reinitialiserSortieProf(index) {
+      const demi = presencesProfesseur[index].demiJournee;
+      presencesProfesseur[index].sortie = (demi === 'matin') ? '12:00:00' : '18:00:00';
+      document.getElementById(`sortie-nfc-prof-${index}`).textContent = ` – Sortie : ${presencesProfesseur[index].sortie}`;
+      alert(`Sortie réinitialisée à ${presencesProfesseur[index].sortie} pour ${presencesProfesseur[index].prenom} ${presencesProfesseur[index].nom}.`);
+    }
+
+    // Supprime une présence du professeur
+    function supprimerPresenceProf(index) {
+      if (confirm(`Supprimer la présence de ${presencesProfesseur[index].prenom} ${presencesProfesseur[index].nom} ?`)) {
+        presencesProfesseur.splice(index, 1);
+        renderNFCPresencesProf(); // Rafraîchit la liste
+      }
+    }
+
+    // Action de validation des présences NFC (simple alerte ici)
+    function validerPresencesNFC() {
+      alert('Présences NFC validées !');
+    }
+
+    // Affiche le tableau des présences pour le professeur (pour émargement manuel)
+    function renderProfesseurTable() {
+      const tbody = document.getElementById('professeur-table');
+      tbody.innerHTML = ''; // Vide le tableau
+      students.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${s.nom}</td>
+          <td>${s.prenom}</td>
+          <td>
+            <select>
+              <option value="present">Présent</option>
+              <option value="absent">Absent</option>
+              <option value="retard">Retard</option>
+            </select>
+          </td>
+          <td><input type="checkbox" /></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Gère la validation du tableau de présences manuel par le professeur
+    function handleValiderTableauProf() {
+      alert('Tableau de présences manuel validé !');
+    }
+
+    // Gère l'accès au récapitulatif des présences du professeur (avec mot de passe)
+    function handleProfesseurAccess() {
+      const pwd = document.getElementById('profCheck').value;
+      if (pwd === 'prof123') { // Mot de passe fixe pour l'exemple
+        isProfesseurAuthenticated = true;
+        renderPresenceListProf();
+      } else {
+        alert('Mot de passe incorrect.');
+        isProfesseurAuthenticated = false; // Réinitialise l'état
+        document.getElementById('presence-list-prof').innerHTML = ''; // Cache la liste
+      }
+    }
+
+    // Affiche la liste complète des présences enregistrées par le professeur (après authentification)
+    function renderPresenceListProf() {
+      if (!isProfesseurAuthenticated) return; // Ne fait rien si non authentifié
+      const ul = document.getElementById('presence-list-prof');
+      ul.innerHTML = '';
+      if (presencesProfesseur.length === 0) {
+          ul.innerHTML = '<li>Aucune présence de professeur enregistrée.</li>';
+          return;
+      }
+      presencesProfesseur.forEach(p => {
+        const li = document.createElement('li');
+        li.textContent = `${p.date} - ${p.nom} ${p.prenom} - Entrée: ${p.entree}, Sortie: ${p.sortie} (${p.demiJournee})`;
+        li.className = 'professeur'; // Applique le style spécifique aux profs
+        ul.appendChild(li);
+      });
+    }
+
+    // --- Fonctions ADMIN ---
+
+    // Stockage simulé des présences admin (pour ses propres scans)
+    let presencesAdmin = [];
+
+    // Vérifie si la présence de l'admin a déjà été scannée pour la demi-journée
+    function presenceAdminDejaScannee(demiJournee) {
+      return presencesAdmin.some(p => p.nom === adminIdentity.nom && p.prenom === adminIdentity.prenom && p.demiJournee === demiJournee);
+    }
+
+    // Gère le scan (simulé) NFC/Manuel pour l'administrateur
+    function handleScanAdmin() {
+      if (currentUser.role !== 'admin') {
+        alert('Accès refusé : vous n\'êtes pas administrateur.');
+        return;
+      }
+      const now = new Date();
+      const demiJournee = (now.getHours() < 12) ? 'matin' : 'après-midi';
+
+      if (presenceAdminDejaScannee(demiJournee)) {
+        alert(`Vous avez déjà scanné votre présence pour la demi-journée ${demiJournee}.`);
+        return;
+      }
+
+      const entree = now.toLocaleTimeString();
+      const sortie = (demiJournee === 'matin') ? '12:00:00' : '18:00:00'; // Heure de sortie par défaut
+
+      presencesAdmin.push({
+        nom: adminIdentity.nom,
+        prenom: adminIdentity.prenom,
+        entree,
+        sortie,
+        demiJournee,
+        date: now.toLocaleDateString('fr-FR')
+      });
+
+      alert(`Présence enregistrée pour ${adminIdentity.prenom} ${adminIdentity.nom} à ${entree} (demi-journée ${demiJournee}).`);
+      renderNFCPresencesAdmin(); // Met à jour la liste des présences NFC de l'admin
+    }
+
+    // Affiche le récapitulatif des présences NFC de l'admin
+    function renderNFCPresencesAdmin() {
+      const ul = document.getElementById('recap-nfc-list-admin');
+      ul.innerHTML = '';
+      const today = new Date().toLocaleDateString('fr-FR');
+      const presencesToday = presencesAdmin.filter(p => p.date === today);
+
+      if (presencesToday.length === 0) {
+          ul.innerHTML = '<li>Aucune présence enregistrée pour aujourd\'hui.</li>';
+          return;
+      }
+
+      presencesToday.forEach((p, i) => {
+        const li = document.createElement('li');
+        li.className = 'presence-item';
+        li.innerHTML = `
+          <strong>${p.nom} ${p.prenom}</strong> – Entrée : ${p.entree} – Sortie : <span id="sortie-nfc-admin-${i}">${p.sortie}</span> (${p.demiJournee})
+          <span class="presence-buttons">
+            <button onclick="modifierSortieAdmin(${i})"><i class="fas fa-edit"></i> Modifier sortie</button>
+            <button onclick="reinitialiserSortieAdmin(${i})"><i class="fas fa-redo-alt"></i> Réinitialiser sortie</button>
+            <button onclick="supprimerPresenceAdmin(${i})"><i class="fas fa-trash-alt"></i> Supprimer</button>
+          </span>
+        `;
+        ul.appendChild(li);
+      });
+    }
+
+    // Modifie l'heure de sortie d'une présence de l'admin
+    function modifierSortieAdmin(index) {
+      const now = new Date();
+      const heure = now.toLocaleTimeString();
+      presencesAdmin[index].sortie = heure;
+      document.getElementById(`sortie-nfc-admin-${index}`).textContent = ` – Sortie : ${heure}`;
+      alert(`Sortie modifiée à ${heure} pour ${presencesAdmin[index].prenom} ${presencesAdmin[index].nom}.`);
+    }
+
+    // Réinitialise l'heure de sortie d'une présence de l'admin
+    function reinitialiserSortieAdmin(index) {
+      const demi = presencesAdmin[index].demiJournee;
+      presencesAdmin[index].sortie = (demi === 'matin') ? '12:00:00' : '18:00:00';
+      document.getElementById(`sortie-nfc-admin-${index}`).textContent = ` – Sortie : ${presencesAdmin[index].sortie}`;
+      alert(`Sortie réinitialisée à ${presencesAdmin[index].sortie} pour ${presencesAdmin[index].prenom} ${presencesAdmin[index].nom}.`);
+    }
+
+    // Supprime une présence de l'admin
+    function supprimerPresenceAdmin(index) {
+      if (confirm(`Supprimer la présence de ${presencesAdmin[index].prenom} ${presencesAdmin[index].nom} ?`)) {
+        presencesAdmin.splice(index, 1);
+        renderNFCPresencesAdmin();
+      }
+    }
+
+    // Affiche le tableau des présences pour l'administrateur (similaire à professeur)
+    function renderAdminTable() {
+      const tbody = document.getElementById('admin-table');
+      tbody.innerHTML = '';
+      students.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${s.nom}</td>
+          <td>${s.prenom}</td>
+          <td>
+            <select>
+              <option value="present">Présent</option>
+              <option value="absent">Absent</option>
+              <option value="retard">Retard</option>
+            </select>
+          </td>
+          <td><input type="checkbox" /></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Gère la validation du tableau de présences manuel par l'administrateur
+    function handleValiderTableauAdmin() {
+      alert('Tableau de présences manuel validé par l\'administrateur !');
+    }
+
+    // Gère l'accès au récapitulatif des présences de l'administrateur (avec mot de passe)
+    function handleAdminAccess() {
+      const pwd = document.getElementById('adminCheck').value;
+      if (pwd === 'admin123') { // Mot de passe fixe pour l'exemple
+        isAdminAuthenticated = true;
+        renderPresenceListAdmin();
+      } else {
+        alert('Mot de passe incorrect.');
+        isAdminAuthenticated = false;
+        document.getElementById('presence-list-admin').innerHTML = '';
+      }
+    }
+
+    // Affiche la liste complète des présences enregistrées par l'admin (après authentification)
+    function renderPresenceListAdmin() {
+      if (!isAdminAuthenticated) return;
+      const ul = document.getElementById('presence-list-admin');
+      ul.innerHTML = '';
+      if (presencesAdmin.length === 0) {
+          ul.innerHTML = '<li>Aucune présence d\'administrateur enregistrée.</li>';
+          return;
+      }
+      presencesAdmin.forEach(p => {
+        const li = document.createElement('li');
+        li.textContent = `${p.date} - ${p.nom} ${p.prenom} - Entrée: ${p.entree}, Sortie: ${p.sortie} (${p.demiJournee})`;
+        li.className = 'professeur'; // Utilise la même classe de style pour l'exemple
+        ul.appendChild(li);
+      });
+    }
+
+    // Gère l'inscription de nouveaux étudiants par l'administrateur
+    function handleInscription() {
+      const nom = document.getElementById('insc-nom').value.trim();
+      const prenom = document.getElementById('insc-prenom').value.trim();
+      const login = document.getElementById('insc-login').value.trim();
+      const mdp = document.getElementById('insc-mdp').value.trim();
+
+      if (!nom || !prenom || !login || !mdp) {
+        alert('Veuillez remplir tous les champs pour l\'inscription.');
+        return;
+      }
+      // Vérifier si le login est déjà existant
+      if (students.find(s => s.login === login) || profs.find(p => p.login === login) || admins.find(a => a.login === login)) {
+        alert('Ce login est déjà utilisé. Veuillez en choisir un autre.');
+        return;
+      }
+
+      students.push({ nom, prenom, login, mdp, role: 'user' }); // Ajoute le nouvel étudiant
+      alert(`Étudiant ${prenom} ${nom} inscrit avec succès !`);
+
+      // Réinitialise le formulaire après inscription
+      document.getElementById('insc-nom').value = '';
+      document.getElementById('insc-prenom').value = '';
+      document.getElementById('insc-login').value = '';
+      document.getElementById('insc-mdp').value = '';
+
+      // Met à jour les tableaux de présence pour inclure le nouvel étudiant
+      renderProfesseurTable();
+      renderAdminTable();
+    }
+
+    // --- Fonctions USER (Étudiant) ---
+
+    // Stockage simulé des présences pour l'utilisateur courant (étudiant)
+    let presencesUser = []; // Ceci stocke les scans de tous les étudiants pour l'exemple
+
+    // Gère le scan (simulé) NFC/Manuel pour l'étudiant
+    function handleScanUser() {
+      if (currentUser.role !== 'user') {
+        alert('Accès refusé : vous n\'êtes pas étudiant.');
+        return;
+      }
+      const now = new Date();
+      const demiJournee = (now.getHours() < 12) ? 'matin' : 'après-midi';
+      const dateToday = now.toLocaleDateString('fr-FR');
+
+      // Vérifier si l'étudiant a déjà scanné pour cette demi-journée aujourd'hui
+      if (presencesUser.some(p => p.login === currentUser.login && p.demiJournee === demiJournee && p.date === dateToday)) {
+        alert(`Vous avez déjà scanné votre présence pour la demi-journée ${demiJournee} d'aujourd'hui.`);
+        return;
+      }
+
+      const entree = now.toLocaleTimeString();
+      const sortie = (demiJournee === 'matin') ? '12:00:00' : '18:00:00'; // Heure de sortie par défaut
+
+      presencesUser.push({
+        login: currentUser.login,
+        nom: currentUser.nom,
+        prenom: currentUser.prenom,
+        date: dateToday,
+        entree,
+        sortie,
+        demiJournee,
+        status: 'Présent', // Statut initial pour le récap
+        justificatif: null // Pas de justificatif par défaut
+      });
+
+      alert(`Votre présence a été enregistrée pour ${currentUser.prenom} ${currentUser.nom} à ${entree} (demi-journée ${demiJournee}).`);
+      renderUserRecap(); // Met à jour le récap de l'utilisateur
+    }
+
+    // Gère la soumission d'un justificatif d'absence (simulé)
+    function handleJustifSubmit() {
+      const motif = document.getElementById('motif').value.trim();
+      const file = document.getElementById('file').files[0]; // Récupère le premier fichier
+
+      if (!motif) {
+        alert('Veuillez entrer un motif pour votre justificatif.');
+        return;
+      }
+      if (!file) {
+        alert('Veuillez joindre un fichier de justificatif.');
+        return;
+      }
+
+      // Simule l'ajout du justificatif à une présence (ex: la dernière absence)
+      // Dans un vrai système, il faudrait associer cela à une absence spécifique
+      const lastAbsence = presencesUser.find(p => p.login === currentUser.login && p.status === 'Absent' && p.justificatif === null);
+
+      if (lastAbsence) {
+        lastAbsence.justificatif = { motif: motif, fileName: file.name, uploadedDate: new Date().toLocaleDateString('fr-FR') };
+        alert(`Justificatif "${file.name}" pour motif "${motif}" envoyé avec succès pour votre dernière absence.`);
+      } else {
+        alert(`Justificatif "${file.name}" pour motif "${motif}" envoyé. Aucune absence récente trouvée à laquelle l'attacher.`);
+      }
+
+      // Réinitialise le formulaire
+      document.getElementById('motif').value = '';
+      document.getElementById('file').value = ''; // Vide le champ fichier
+      renderUserRecap();
+    }
+
+    // Affiche le récapitulatif mensuel des présences/absences de l'étudiant
+    function renderUserRecap() {
+      const ul = document.getElementById('user-recap');
+      ul.innerHTML = '';
+      const userPresences = presencesUser.filter(p => p.login === currentUser.login);
+
+      if (userPresences.length === 0) {
+        ul.innerHTML = '<li>Aucun enregistrement de présence/absence pour le moment.</li>';
+        return;
+      }
+
+      // Pour l'exemple, nous allons regrouper par date et demi-journée
+      const recapMap = new Map();
+      userPresences.forEach(p => {
+          const key = `${p.date} (${p.demiJournee})`;
+          if (!recapMap.has(key)) {
+              recapMap.set(key, { date: p.date, demiJournee: p.demiJournee, status: 'Présent', details: [] });
+          }
+          recapMap.get(key).details.push(`Entrée: ${p.entree}, Sortie: ${p.sortie}`);
+          if (p.justificatif) {
+              recapMap.get(key).status += ` (Justifié: ${p.justificatif.motif})`;
+          }
+      });
+
+      recapMap.forEach(entry => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${entry.date} (${entry.demiJournee})</strong> - Statut: ${entry.status}.<br>Détails: ${entry.details.join(', ')}`;
+          ul.appendChild(li);
+      });
+    }
+
+    // --- Fonctions GRETA ---
+
+    // Affiche les relevés pour GRETA (étudiants et professeurs)
+    function renderGretaReleves() {
+      renderGretaStudentReleves();
+      renderGretaProfReleves();
+    }
+
+    // Affiche le relevé de présence/absence par étudiant pour GRETA
+    function renderGretaStudentReleves() {
+      const ul = document.getElementById('releve-etudiant-list');
+      ul.innerHTML = '';
+
+      if (students.length === 0) {
+          ul.innerHTML = '<li>Aucun étudiant enregistré.</li>';
+          return;
+      }
+
+      // Regrouper les présences/absences par étudiant
+      const studentRecap = new Map();
+      students.forEach(s => {
+          studentRecap.set(s.login, { nom: s.nom, prenom: s.prenom, presences: [], absences: [] });
+      });
+
+      presencesUser.forEach(p => {
+          const studentEntry = studentRecap.get(p.login);
+          if (studentEntry) {
+              if (p.status === 'Présent') {
+                  studentEntry.presences.push(`${p.date} (${p.demiJournee})`);
+              } else { // Si l'on avait une logique pour les absences
+                  let absenceDetail = `${p.date} (${p.demiJournee})`;
+                  if (p.justificatif) {
+                      absenceDetail += ` (Justifié: ${p.justificatif.motif})`;
+                  }
+                  studentEntry.absences.push(absenceDetail);
+              }
+          }
+      });
+      // Pour l'exemple, si un étudiant n'a pas de scan, il est considéré absent
+      // Ceci est une simplification. Dans la vraie vie, il faudrait une source de cours.
+      students.forEach(s => {
+          if (!presencesUser.some(p => p.login === s.login)) {
+             const studentEntry = studentRecap.get(s.login);
+             if (studentEntry) {
+                 studentEntry.absences.push('Aucun enregistrement');
+             }
+          }
+      });
+
+
+      studentRecap.forEach(data => {
+          const li = document.createElement('li');
+          let presenceText = data.presences.length > 0 ? `Présences: ${data.presences.join(', ')}` : 'Aucune présence enregistrée.';
+          let absenceText = data.absences.length > 0 ? `Absences: ${data.absences.join(', ')}` : 'Aucune absence enregistrée.';
+
+          li.innerHTML = `<strong>${data.prenom} ${data.nom}</strong><br>${presenceText}<br>${absenceText}`;
+          ul.appendChild(li);
+      });
+    }
+
+    // Affiche le relevé de présence des professeurs pour GRETA
+    function renderGretaProfReleves() {
+      const ul = document.getElementById('releve-prof-list');
+      ul.innerHTML = '';
+
+      if (profs.length === 0) {
+          ul.innerHTML = '<li>Aucun professeur enregistré.</li>';
+          return;
+      }
+
+      // Regrouper les présences par professeur
+      const profRecap = new Map();
+      profs.forEach(p => {
+          profRecap.set(p.login, { nom: p.nom, prenom: p.prenom, presences: [] });
+      });
+
+      presencesProfesseur.forEach(p => {
+          const profEntry = profRecap.get(p.login);
+          if (profEntry) {
+              profEntry.presences.push(`${p.date} (${p.demiJournee}) - ${p.entree} à ${p.sortie}`);
+          }
+      });
+
+      profRecap.forEach(data => {
+          const li = document.createElement('li');
+          const presenceText = data.presences.length > 0 ? `Présences: ${data.presences.join('; ')}` : 'Aucune présence enregistrée.';
+          li.innerHTML = `<strong>${data.prenom} ${data.nom}</strong><br>${presenceText}`;
+          ul.appendChild(li);
+      });
+    }
+
+
+    // --- Fonction de Génération de PDF ---
+
+    // Télécharge le contenu d'un élément HTML sous forme de PDF
+    function downloadPDF(elementId, filename) {
+      const element = document.getElementById(elementId);
+      if (!element) {
+        alert('Contenu à télécharger introuvable.');
+        return;
+      }
+
+      const doc = new jsPDF();
+      doc.html(element, {
+        callback: function(doc) {
+          doc.save(`${filename}_${new Date().toLocaleDateString('fr-FR')}.pdf`);
+        },
+        x: 10,
+        y: 10,
+        width: 180, // Largeur du contenu PDF
+        windowWidth: element.offsetWidth // Utilise la largeur réelle de l'élément pour le rendu
+      });
+    }
+
+  </script>
+
+</body>
+</html>
